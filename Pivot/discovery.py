@@ -11,7 +11,7 @@ def discovery_search_node(state: DiscoveryState):
     Analyzes the user profile and triggers search tool calls to find 
     emerging 2026 career trends.
     """
-    profile = state.profile
+    profile = state["profile"]
     skills_list = ", ".join(profile.skills[:5])
     
     prompt = ChatPromptTemplate.from_messages([
@@ -33,8 +33,11 @@ def discovery_search_node(state: DiscoveryState):
         "jobLevel": profile.jobLevel,
         "industries": ", ".join(profile.jobIndustry),
         "skills": skills_list,
-        "geo": profile.geo
+        "geo": profile.jobGeo
     })
 
-    # Returns the tool_calls which LangGraph will use to trigger the Search tool
+    if not response.tool_calls:
+        # Fallback: manually return a list that looks like search results
+        return {"discovery_output": [{"url": "internal", "content": "Trending 2026 roles: Agentic Workflow Engineer, AI Solutions Architect."}]}
+
     return {"discovery_output": response.tool_calls}

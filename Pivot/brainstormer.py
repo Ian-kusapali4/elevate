@@ -4,7 +4,6 @@ from langchain_core.prompts import ChatPromptTemplate
 # Ensure your schemas.py is in the 'Pivot' directory
 from Pivot.schemas import DiscoveryState, BrainstormOutput
 
-
 llm = ChatOllama(
     model="gemma3:12b-cloud", 
     temperature=0.7,
@@ -15,8 +14,12 @@ def path_brainstormer_node(state: DiscoveryState):
     """
     Synthesizes search results and profile data into 3-5 potential career paths.
     """
-    profile = state.profile
-    search_intel = str(state.discovery_output)
+    # FIX 1: Bracket access for profile
+    profile = state["profile"]
+    
+    # FIX 2: Safe access for discovery_output
+    discovery_data = state.get("discovery_output", [])
+    search_intel = str(discovery_data)
 
     prompt = ChatPromptTemplate.from_messages([
         ("system", (
@@ -58,9 +61,10 @@ def path_brainstormer_node(state: DiscoveryState):
             "jobTitle": profile.jobTitle,
             "years_exp": profile.years_of_experience,
             "skills": ", ".join(profile.skills),
-           "search_results": str(state.discovery_output)
+            # FIX 3: Changed 'state.discovery_output' to 'search_intel' 
+            # This was the specific line causing your last error!
+            "search_results": search_intel 
         })
-        
         
         return {"suggested_paths": result.suggested_paths}
     
@@ -68,6 +72,7 @@ def path_brainstormer_node(state: DiscoveryState):
         print(f"Error in Brainstormer Node: {e}")
         # Fallback empty list if parsing fails
         return {"suggested_paths": []}
+
 
 if __name__ == "__main__":
     from Pivot.schemas import CandidateProfile, DiscoveryState, EmergingRole
