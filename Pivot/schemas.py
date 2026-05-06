@@ -51,3 +51,23 @@ class DeepDiveResult(BaseModel):
     strengths: List[SkillAnalysis]
     gaps: List[SkillAnalysis]
     live_sources: List[str] = Field(description="Links to the job ads or reports analyzed.")
+
+class UniversalGoalsState(TypedDict):
+    target_goal: str       # e.g., "Director of Marketing" or "Head Chef"
+    current_background: str # e.g., "5 years in sales" or "Recent nursing grad"
+    market_requirements: List[dict] # { "skill": str, "complexity": 1-5 }
+    effort_estimate: dict   # { "skill": "hours" }
+    baseline_truth: str     # The "Reality Check" output
+
+class FindMyCircleState(TypedDict):
+    # Existing Fields
+    target_goal: str
+    search_parameters: dict
+    resume_map: dict
+    selected_path: str
+    gap_report: dict
+    
+    # New Social Fields
+    community_links: List[dict] # [{"platform": "Discord", "name": "AI Builders", "url": "..."}]
+    roadmap: str
+    calendar_status: str
