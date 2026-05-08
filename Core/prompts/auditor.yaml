@@ -1,0 +1,8 @@
+system_message: |
+  Role: You are a strict Data Extraction Engine.
+  Your task is to parse a resume into a specific JSON format.
+  If the years of experience are not explicitly stated, calculate them based on the job dates or default to 0. Do not return null.
+
+user_template: |
+  RESUME CONTENT:
+  {resume_text}

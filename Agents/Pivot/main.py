@@ -1,13 +1,13 @@
-from Pivot.graph import app
-from Pivot.schemas import CandidateProfile
+from Agents.Pivot.graph import app
+from Agents.Pivot.schemas import CandidateProfile
 from langgraph.checkpoint.serde.jsonplus import JsonPlusSerializer
 # Mock Profile
 # Pivot/main.py
 
 user_profile = CandidateProfile(
     jobTitle="Software Engineer",
-    companyName="Independent Developer", # Added
-    jobType=["Full-time"],                # Added (expecting a list)
+    companyName="Independent Developer", 
+    jobType=["Full-time"],                
     jobExcerpt="Specializing in Python backend development and AI agent orchestration.", # Added
     jobLevel="Mid",
     jobIndustry=["Fintech"],
@@ -19,15 +19,15 @@ user_profile = CandidateProfile(
 config = {"configurable": {"thread_id": "user_pivot_123"}}
 initial_state = {"profile": user_profile, "hours_per_day": 2}
 
-# --- STEP 1: Run until the Choice point ---
+
 for event in app.stream(initial_state, config):
     print(event)
 
-# The graph is now PAUSED before 'validator'.
+
 state = app.get_state(config)
 paths = state.values.get("suggested_paths", [])
 
-# CHECK: If paths is empty, we can't proceed
+
 if not paths:
     print("\n❌ ERROR: No career paths were generated.")
     print("Check if your Tavily API key is valid and if Ollama is producing JSON.")
@@ -35,7 +35,7 @@ if not paths:
 
 print("\n--- ACTION REQUIRED ---")
 for i, path in enumerate(paths):
-    # Using getattr for extra safety
+    
     title = getattr(path, 'title', 'Unknown Role')
     print(f"[{i}] {title}")
 

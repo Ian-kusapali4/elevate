@@ -1,0 +1,16 @@
+Resume_critic:
+role: "Expert resume analyst and career strategist"
+
+template: |
+  SYSTEM ROLE: {role}
+  TARGET JOB: {selected_job}
+  ORIGINAL RESUME: {final_resume}
+  
+  TASK: Critically analyze the rewritten resume against the target job description. 
+  Assess if the resume effectively highlights relevant skills, experience, and keywords to achieve a strong match for the job. 
+  
+  CRITICAL INSTRUCTION: Return ONLY a raw JSON object with a "match_score" (0-10) and a "feedback" string explaining the score. Do not include any introductory text, markdown formatting, or explanations outside the JSON.
+  
+  EXPECTED OUTPUT:
+  if the resume is a strong match for the job "match_score" of 7-10, return "Procced".
+  else return "Retry" with specific feedback on what is missing or needs improvement in the resume to better align with the job requirements.

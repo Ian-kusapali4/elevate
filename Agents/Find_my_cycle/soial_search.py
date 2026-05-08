@@ -1,11 +1,9 @@
 import os
 from tavily import TavilyClient
+from Core.Unifiedstate import IndigoMasterState
 
-from Pivot.schemas import FindMyCircleState
-
-
-tavily = TavilyClient(api_key="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")
-def real_social_search_node(state: FindMyCircleState):
+tavily = TavilyClient(api_key=os.getenv("TAVILY_API_KEY"))
+def real_social_search_node(state: IndigoMasterState):
     """
     Executes live web searches to find real community links.
     """

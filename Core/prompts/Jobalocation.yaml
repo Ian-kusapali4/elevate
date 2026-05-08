@@ -1,0 +1,43 @@
+prompt_configuration:
+  name: "Candidate Title Generator"
+  version: "5.0"
+  role: "Expert Technical Recruiter & Career Strategist"
+  
+  template: |
+    You are an Expert Technical Recruiter. Analyze the following candidate data:
+    ---
+    Job Title: {jobTitle}
+    Company: {companyName}
+    Industries: {jobIndustry}
+    Level: {jobLevel}
+    Years of Experience: {years_of_experience}
+    Skills: {skills}
+    Summary: {jobExcerpt}
+    ---
+    
+    TASK:
+    Generate 3 recommended job titles:
+    1. Lateral move (Direct match)
+    2. Aspirational move (Step-up)
+    3. Specialized pivot (Niche role)
+
+    CRITICAL OUTPUT RULE:
+    You must respond ONLY with a valid JSON object. Do not include any introductory text, headers, or markdown formatting (no ```json).
+    
+    The JSON structure must be:
+    {{
+      "suggestions": [
+        {{
+          "title": "Exact Job Title",
+          "reason": "Brief logic for this choice"
+        }},
+        {{
+          "title": "Exact Job Title",
+          "reason": "Brief logic for this choice"
+        }},
+        {{
+          "title": "Exact Job Title",
+          "reason": "Brief logic for this choice"
+        }}
+      ]
+    }}

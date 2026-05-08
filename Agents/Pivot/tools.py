@@ -1,12 +1,12 @@
-from langchain_tavily import TavilySearch
+from langchain_community.tools.tavily_search import TavilySearchResults
 from langchain_core.tools import tool
 
 # Initialize Tavily with your API key
 # Tavily is a search engine optimized specifically for LLMs and Agents
-tavily_search = TavilySearch(
+tavily_search = TavilySearchResults(
     max_results=3,
     tavily_api_key="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" 
-)
+    )
 
 @tool
 def career_discovery_search(query: str):

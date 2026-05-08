@@ -1,0 +1,11 @@
+python-jobspy
+langchain_core
+langchain_ollama
+langgraph
+pandas
+pydantic
+pypdf
+streamlit
+python-dotenv
+pyyaml
+langchain_groq

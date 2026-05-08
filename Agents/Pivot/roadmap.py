@@ -1,6 +1,6 @@
 from langchain_ollama import ChatOllama
 from langchain_core.prompts import ChatPromptTemplate
-from Pivot.schemas import DiscoveryState
+from Agents.Pivot.schemas import DiscoveryState
 
 llm = ChatOllama(model="gemma3:12b-cloud", temperature=0.3)
 

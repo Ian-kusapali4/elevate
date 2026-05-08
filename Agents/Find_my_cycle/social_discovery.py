@@ -7,7 +7,7 @@ def generate_circle_parameters_node(state: dict):
     """
     Analyzes the Resume Skill Map to create hyper-niche search terms.
     """
-    resume_map = state["resume_map"] # Extracted from Resume Parser
+    resume_map = state.get("CandidateProfile")
     
     prompt = f"""
     Analyze this professional profile: {resume_map}
