@@ -21,7 +21,7 @@ class GraphState(BaseModel):
      
      #4. Final Outputs
     selected_job_id: Optional[str] = None
-    rewritten_resume: Optional[str] = None
+    resume_suggestions: Optional[str] = None
     final_resume: Optional[str] = None
     target_job_description: Optional[str] = None
     

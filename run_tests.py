@@ -53,15 +53,15 @@ def test_graph_with_data():
     final_state = app.get_state(config)
     
     # Check the state values directly for the key your agent returns
-    # Based on your logs, the human_rewritter_agent returns 'rewritten_resume'
-    result = final_state.values.get("rewritten_resume")
+    # Based on your logs, the human_rewritter_agent returns 'resume_suggestions'
+    result = final_state.values.get("resume_suggestions")
 
     if result:
         print("\n" + "✨" * 10 + " FINAL HUMAN-CENTRIC RESUME " + "✨" * 10)
         print(result)
         print("✨" * 48)
     else:
-        print("\n⚠️  No 'rewritten_resume' found in the final state.")
+        print("\n⚠️  No 'resume_suggestions' found in the final state.")
 if __name__ == "__main__":
     test_graph_with_data()
 

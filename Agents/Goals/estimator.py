@@ -26,10 +26,10 @@ def universal_reality_check_node(state: IndigoMasterState):
     
     try:
         response = llm.invoke(prompt)
-        baseline_truth = response.content.strip()
+        learning_roadmap = response.content.strip()
     except:
-        baseline_truth = "Awaiting deeper analysis. Expected timeline: 6-12 months of dedicated transition."
+        learning_roadmap = "Awaiting deeper analysis. Expected timeline: 6-12 months of dedicated transition."
 
     return {
-        "baseline_truth": baseline_truth
+        "learning_roadmap": learning_roadmap
     }

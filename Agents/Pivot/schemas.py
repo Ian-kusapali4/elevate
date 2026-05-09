@@ -60,7 +60,7 @@ class UniversalGoalsState(TypedDict):
     current_background: str
     market_requirements: List[dict]
     effort_estimate: dict
-    baseline_truth: str
+    learning_roadmap: str
 
 class DiscoveryState(TypedDict):
     """The global state for the Pivot Graph."""
@@ -80,6 +80,6 @@ class FindMyCircleState(TypedDict):
     search_parameters: dict
     selected_path: str
     gap_report: dict
-    community_links: List[dict]
+    curated_circles: List[dict]
     roadmap: str
     calendar_status: str
