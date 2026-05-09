@@ -1,6 +1,6 @@
 from langchain_ollama import ChatOllama
 from langchain_community.tools.tavily_search import TavilySearchResults
-from Agents.Pivot.schemas import UniversalGoalsState
+from Core.Unifiedstate import UniversalGoalsState
 import ast
 import re
 

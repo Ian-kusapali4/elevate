@@ -1,6 +1,6 @@
 from langchain_ollama import ChatOllama
 from langchain_core.prompts import ChatPromptTemplate
-from Agents.Pivot.schemas import DeepDiveResult
+from Core.Unifiedstate import DeepDiveResult
 
 # Using a powerful model here for high-precision gap analysis
 llm = ChatOllama(model="gemma3:12b-cloud", temperature=0)

@@ -47,11 +47,10 @@ def build_unified_graph():
 
     # Spoke B: Pivot
     builder.add_node("discovery", discovery_search_node)
-    builder.add_node("brainstormer", path_brainstormer_node)
     builder.add_node("validator", market_validation_node)
     builder.add_node("roadmap", roadmap_generator_node)
     builder.add_node("loopback", resume_loopback_node)
-
+    builder.add_node("brainstormer", path_brainstormer_node)
     # Spoke C: Goals
     builder.add_node("analyze_goal", goal_analysis_node)
     builder.add_node("reality_check", universal_reality_check_node)
@@ -64,17 +63,17 @@ def build_unified_graph():
     builder.add_edge(START, 'pdf_reader')
     builder.add_edge('pdf_reader', 'Resume_extaction')
 
-    # Wait for extraction success
+
     builder.add_conditional_edges(
         "Resume_extaction", 
         ingestion_condition, 
         {
             "passed": "human_decision_gate", 
+            "go_to_pivots": "brainstormer",  
             "retry": "Resume_extaction",
             "failed": END
         }
     )
-
 
     builder.add_conditional_edges(
         "human_decision_gate", 

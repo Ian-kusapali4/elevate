@@ -2,11 +2,11 @@ import os
 import json
 from langchain_ollama import ChatOllama
 from langchain_core.prompts import ChatPromptTemplate
-from Agents.Pivot.schemas import DiscoveryState, BrainstormOutput
+from Core.Unifiedstate import IndigoMasterState, BrainstormOutput, CareerPath
 
 llm = ChatOllama(model="gemma3:12b-cloud", temperature=0.7, format="json")
 
-def path_brainstormer_node(state: DiscoveryState):
+def path_brainstormer_node(state: IndigoMasterState):
     profile = state.get("CandidateProfile", {})
     search_intel = str(state.get("discovery_output", "No search data found."))
 
@@ -20,58 +20,27 @@ def path_brainstormer_node(state: DiscoveryState):
     ])
 
     chain = prompt | llm 
-    
-    try:
-        print("\n" + "="*60)
-        print("🚀 BRAINSTORMER: INVOKING LLM...")
-        
-        response = chain.invoke({
-            "profile": str(profile),
-            "search_results": search_intel
-        })
-        
-        raw_content = response.content
-        print("🔍 DEBUG: RAW LLM COMPLETION BELOW:")
-        print(raw_content)
-        print("="*60 + "\n")
 
-        # 1. Clean the Markdown out of the string
-        cleaned_content = raw_content.replace("```json", "").replace("```", "").strip()
+    try:
+        response = chain.invoke({"profile": str(profile), "search_results": search_intel})
+        
+        # 1. Clean and parse
+        cleaned_content = response.content.replace("```json", "").replace("```", "").strip()
         parsed_json = json.loads(cleaned_content)
         
-        # 2. Find the paths array, even if the LLM hallucinated the structure
-        paths_data = []
-        if "brainstormOutput" in parsed_json and "pivotPaths" in parsed_json["brainstormOutput"]:
-            paths_data = parsed_json["brainstormOutput"]["pivotPaths"]
-        elif "pivotPaths" in parsed_json:
-            paths_data = parsed_json["pivotPaths"]
-        elif "suggested_paths" in parsed_json:
-            paths_data = parsed_json["suggested_paths"]
-        elif isinstance(parsed_json, list):
-            paths_data = parsed_json # In case it just returns the array
-            
-        # 3. Rebuild the correct structure for Pydantic
-        corrected_json = {"suggested_paths": paths_data}
+        # 2. Flexible extraction
+        paths_data = parsed_json.get("suggested_paths") or parsed_json.get("pivotPaths") or []
         
-        # 4. Validate
-        validated_output = BrainstormOutput.model_validate(corrected_json)
+        # 3. Validate with Pydantic for safety
+        validated_output = BrainstormOutput.model_validate({"suggested_paths": paths_data})
         
-        return {"suggested_paths": validated_output.suggested_paths}
-    
+        # 4. Return as a list of dicts for the TypedDict state
+        serializable_paths = [path.model_dump() for path in validated_output.suggested_paths]
+        
+        print(f"✅ SUCCESS: Found {len(serializable_paths)} paths")
+        return {"suggested_paths": serializable_paths}
+
     except Exception as e:
-        print(f"!!! BRAINSTORMER FAILURE: {str(e)}")
-        if 'raw_content' in locals():
-            print(f"FAILED CONTENT: {raw_content}")
-
-        return {"suggested_paths": [
-            {
-                "title": "Parsing Error Recovery", 
-                "description": f"The JSON was formatted incorrectly: {str(e)[:50]}", 
-                "pitch": "Check terminal for raw output", 
-                "market_context": "N/A", 
-                "bridge_skills": ["Debug JSON"], 
-                "gap_skills": [], 
-                "salary_range": "N/A"
-            }
-        ]}
-
+        print(f"❌ NODE FAILURE: {str(e)}")
+        # Return an empty list so the UI knows the node finished but failed
+        return {"suggested_paths": []}

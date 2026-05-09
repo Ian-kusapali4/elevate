@@ -1,11 +1,11 @@
 from langchain_ollama import ChatOllama
 from langchain_core.prompts import ChatPromptTemplate
-from Agents.Pivot.schemas import DiscoveryState
+from Core.Unifiedstate import  CandidateProfile
 from Agents.Pivot.tools import career_discovery_search
 
 llm = ChatOllama(model="gemma3:12b-cloud", temperature=0)
 
-def discovery_search_node(state: DiscoveryState):
+def discovery_search_node(state: CandidateProfile):
     """
     Analyzes the user profile and triggers search tool calls to find 
     emerging 2026 career trends.

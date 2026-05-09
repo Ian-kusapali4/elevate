@@ -6,21 +6,18 @@ from Core.model_factory import get_model
 my_model = get_model()
 critic_config = yaml_extraction('critic_resume_rewrite.yaml')
 
-def ingestion_condition(graph_state: IndigoMasterState) -> bool:
-    """
-    these are the graph condtions that will be used to check if the graph can proceed to the next node, if the conditions are not met, the graph can retry the previous node or end with an error message.
-    """
-    count = 0
+def ingestion_condition(graph_state: IndigoMasterState):
+   
     if not graph_state.get("raw_resume"):
-        while count < 3:
-            print("retrying ingestion condition check...")
-            count += 1
-            return "retry"
-        else:            
-            print("Ingestion condition check failed after 3 attempts. Please provide a valid resume.")
         return "failed"
-    return "passed"
-
+    
+    
+    entry_mode = graph_state.get("entry_type")
+    
+    if entry_mode == "pivot":
+        return "go_to_pivots"
+    
+    return "passed" 
 
 def skill_extraction_condition(graph_state: IndigoMasterState):
     profile = graph_state.get("CandidateProfile")
