@@ -12,13 +12,13 @@ if root_dir not in sys.path:
 
 from Core.Global_Workflow import build_unified_graph
 from components.sidebar import render_sidebar
-from components.chat import render_chat_interface
+from components.chat import render_control_interface  # Corrected Import
 from components.dashboard import render_dashboard
 
 # --- 2. Page Config ---
 st.set_page_config(page_title="Indigo AI 2.0", layout="wide", page_icon="🚀")
 
-# --- 3. Strict Session State Initialization ---
+# --- 3. Session State Initialization ---
 init_keys = {
     "graph_app": None,
     "last_results": {},
@@ -26,7 +26,7 @@ init_keys = {
     "messages": [],
     "logs": [],
     "CandidateProfile": None,
-    "active_pivot_view": None  # Added to prevent UnboundLocalError in Pivots
+    "active_pivot_view": None 
 }
 
 for key, value in init_keys.items():
@@ -37,20 +37,22 @@ for key, value in init_keys.items():
             st.session_state[key] = value
 
 # --- 4. Sync State Before Rendering ---
-# This ensures that if the graph is waiting at an interrupt (like after fetch_jobs),
-# the dashboard can see the jobs currently sitting in the graph's memory.
 config = {"configurable": {"thread_id": st.session_state.thread_id}}
 current_state = st.session_state.graph_app.get_state(config)
 
 if current_state and current_state.values:
-    # Synchronize the persistent graph state with the UI session state
     st.session_state.last_results = current_state.values
 
 # --- 5. Render Layout ---
 render_sidebar(current_dir)
 
+# Define columns
 col_chat, col_dash = st.columns([1, 1.4])
 
-# Pass the columns into the component functions
-render_chat_interface(col_chat)
-render_dashboard(col_dash)
+# Render the components into the columns
+with col_chat:
+    # Use the new function name we imported
+    render_control_interface(col_chat)
+
+with col_dash:
+    render_dashboard(col_dash)

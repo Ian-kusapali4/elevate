@@ -1,69 +1,71 @@
 import streamlit as st
-import re
 
-def render_chat_interface(col):
+def render_control_interface(col):
     config = {"configurable": {"thread_id": st.session_state.thread_id}}
     
+    # Retrieve existing state to maintain context (like the uploaded file/resume)
+    last_state = st.session_state.graph_app.get_state(config)
+    vals = last_state.values if last_state and last_state.values else {}
+    existing_file = vals.get("file")
+
     with col:
-        st.subheader("🤖 Strategy Assistant")
-        chat_container = st.container(height=550)
+        st.subheader("⚙️ Indigo Command Center")
         
-        for message in st.session_state.messages:
-            with chat_container.chat_message(message["role"]):
-                st.markdown(message["content"])
-
-        if prompt := st.chat_input("Ex: 'Set goal to CTO' or 'Find me job matches'"):
-            st.session_state.messages.append({"role": "user", "content": prompt})
-            with chat_container.chat_message("user"):
-                st.markdown(prompt)
-
-            p_lower = prompt.lower()
+        # --- SECTION: GOAL SETTING ---
+        with st.container(border=True):
+            st.markdown("### 🎯 Career Objective")
+            goal_input = st.text_input(
+                "Define your target role", 
+                value=vals.get("target_goal", ""), 
+                placeholder="e.g., Senior AI Engineer"
+            )
             
-            # FIX: Get the existing file path from the last known state
-            # This prevents the 'NoneType has no attribute seek' error
-            existing_file = st.session_state.last_results.get("file")
-
-            with chat_container.chat_message("assistant"):
-                response_text = ""
-                new_data = {"file": existing_file} # Initialize with existing file
-
-                if any(w in p_lower for w in ["goal", "target", "become"]):
-                    clean_goal = re.sub(r'(?i)^(set goal to|set goal|goal is|goal|target is|target|become a|become)\s*:?\s*', '', prompt).strip()
-                    response_text = f"Targeting: **{clean_goal}**. Mapping gaps..."
-                    new_data.update({"target_goal": clean_goal, "entry_type": "goal"})
-                
-                elif any(w in p_lower for w in ["match", "job", "career"]):
-                    response_text = "Scanning market for job matches..."
-                    new_data.update({"entry_type": "job_match"})
-                
-                elif any(w in p_lower for w in ["circle", "network", "people"]):
-                    response_text = "Analyzing your professional circle..."
-                    new_data.update({"entry_type": "circle"})
-                
+            if st.button("🚀 Map Goal Path", use_container_width=True, type="primary"):
+                if goal_input:
+                    execute_indigo_task(
+                        {"target_goal": goal_input, "entry_type": "goal", "file": existing_file},
+                        config
+                    )
                 else:
-                    response_text = "Processing your request..."
-                    new_data.update({"entry_type": "general"})
+                    st.warning("Please enter a goal first.")
 
-                st.write(response_text)
+        st.divider()
+
+        # --- SECTION: ACTION TRIGGERS ---
+        st.markdown("### 🛠️ Quick Actions")
+        
+        c1, c2 = st.columns(2)
+        
+        with c1:
+            if st.button("🔍 Find Job Matches", use_container_width=True):
+                execute_indigo_task({"entry_type": "job_match", "file": existing_file}, config)
                 
-                # Update state with BOTH the new intent AND the existing file path
-                st.session_state.graph_app.update_state(config, new_data)
+        with c2:
+            if st.button("⭕ Analyze Circle", use_container_width=True):
+                execute_indigo_task({"entry_type": "circle", "file": existing_file}, config)
 
-                with st.status("Indigo Engine Running...", expanded=False) as status:
-                    try:
-                        # Passing None as input because we updated state above
-                        for event in st.session_state.graph_app.stream(None, config, stream_mode="updates"):
-                            if event:
-                                node_name = list(event.keys())[0]
-                                st.write(f"✅ {node_name.replace('_', ' ').title()} synced.")
-                        
-                        status.update(label="Sync Complete!", state="complete")
-                        st.session_state.messages.append({"role": "assistant", "content": response_text})
-                        
-                        # Refresh results for the dashboard
-                        final_state = st.session_state.graph_app.get_state(config)
-                        st.session_state.last_results = final_state.values
-                        st.rerun()
+        if st.button("🔄 Generate Career Pivots", use_container_width=True):
+            execute_indigo_task({"entry_type": "pivot", "file": existing_file}, config)
 
-                    except Exception as e:
-                        st.error(f"Execution Error: {str(e)}")
+def execute_indigo_task(new_data, config):
+    """Encapsulated execution logic for the Indigo Engine"""
+    try:
+        # Update state with the new intent and context
+        st.session_state.graph_app.update_state(config, new_data)
+
+        with st.status("Indigo Engine Executing...", expanded=True) as status:
+            # Run the graph stream
+            for event in st.session_state.graph_app.stream(None, config, stream_mode="updates"):
+                if event:
+                    node_name = list(event.keys())[0]
+                    st.write(f"✅ {node_name.replace('_', ' ').title()} completed.")
+            
+            status.update(label="Sync Complete!", state="complete")
+            
+            # Refresh session results and trigger UI update
+            final_state = st.session_state.graph_app.get_state(config)
+            st.session_state.last_results = final_state.values
+            st.rerun()
+
+    except Exception as e:
+        st.error(f"Execution Error: {str(e)}")
