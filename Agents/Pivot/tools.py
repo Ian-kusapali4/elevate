@@ -1,12 +1,9 @@
-from langchain_community.tools.tavily_search import TavilySearchResults
 from langchain_core.tools import tool
+from tavily import TavilyClient
+import os
 
-# Initialize Tavily with your API key
-# Tavily is a search engine optimized specifically for LLMs and Agents
-tavily_search = TavilySearchResults(
-    max_results=3,
-    tavily_api_key="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" 
-    )
+
+tavily_client = TavilyClient(api_key=os.getenv("TAVILY_API_KEY"))
 
 @tool
 def career_discovery_search(query: str):
@@ -14,7 +11,8 @@ def career_discovery_search(query: str):
     Searches for high-growth, hybrid, and emerging career paths trending in 2026.
     Use this for broad trend discovery.
     """
-    return tavily_search.invoke({"query": query})
+    # Use .search() for the raw Tavily Python client
+    return tavily_client.search(query=query, max_results=5)
 
 @tool
 def deep_dive_market_scraper(role_title: str):
@@ -23,9 +21,15 @@ def deep_dive_market_scraper(role_title: str):
     requirements for a target job title. Use this for specific validation.
     """
     query = f"technical requirements and responsibilities for {role_title} 2026 job postings"
-    return tavily_search.invoke({"query": query})
+    return tavily_client.search(query=query, search_depth="advanced")
 
 if __name__ == "__main__":
-    # Internal test to ensure the Tavily connection is active
+    # Test the raw client functionality
     print("Executing test search...")
-    print(tavily_search.invoke("Latest AI engineering roles 2026"))
+    try:
+        response = tavily_client.search(query="Latest AI engineering roles 2026")
+        print("Search successful. Results found.")
+        # To test the tool specifically:
+        # print(career_discovery_search.invoke("Top 2026 tech trends"))
+    except Exception as e:
+        print(f"Error: {e}")

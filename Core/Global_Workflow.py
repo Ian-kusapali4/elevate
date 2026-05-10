@@ -33,6 +33,15 @@ from Core.Nodes.Conditions import (
 def build_unified_graph():
     builder = StateGraph(IndigoMasterState)
 
+    builder.add_conditional_edges('suggested_Job_formating', skill_extraction_condition, {
+        "passed": 'fetch_jobs', 
+        "retry": 'suggested_Job_formating',
+        "failed": END
+    })
+
+def build_unified_graph():
+    builder = StateGraph(IndigoMasterState)
+
     # 1. ADD NODES
     builder.add_node('pdf_reader', pdf_reader)
     builder.add_node('Resume_extaction', Resume_extaction)
@@ -91,11 +100,15 @@ def build_unified_graph():
         "retry": 'suggested_Job_formating',
         "failed": END
     })
+
     builder.add_edge('fetch_jobs', 'select_job_details')
+    
     builder.add_conditional_edges('select_job_details', critic_resume_rewrite_condition, {
-        "Procced": 'resume_rewrite',
-        "retry": 'fetch_jobs' 
+        "Procced": 'resume_rewrite', 
+        "retry": 'fetch_jobs',
+        "waiting": END 
     })
+
     builder.add_edge('resume_rewrite', 'human_rewritter_agent')
     builder.add_edge('human_rewritter_agent', END)
 
@@ -118,5 +131,5 @@ def build_unified_graph():
     memory = MemorySaver()
     return builder.compile(
         checkpointer=memory, 
-        interrupt_before=["human_decision_gate"] 
+        interrupt_before=["human_decision_gate", "select_job_details"] 
     )

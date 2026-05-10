@@ -15,18 +15,18 @@ from components.sidebar import render_sidebar
 from components.chat import render_chat_interface
 from components.dashboard import render_dashboard
 
-# --- 2. Page Config (MUST be first Streamlit command) ---
+# --- 2. Page Config ---
 st.set_page_config(page_title="Indigo AI 2.0", layout="wide", page_icon="🚀")
 
 # --- 3. Strict Session State Initialization ---
-# Initialize all keys here to avoid AttributeErrors in components
 init_keys = {
     "graph_app": None,
     "last_results": {},
     "thread_id": "indigo_user_session_v2",
     "messages": [],
     "logs": [],
-    "CandidateProfile": None
+    "CandidateProfile": None,
+    "active_pivot_view": None  # Added to prevent UnboundLocalError in Pivots
 }
 
 for key, value in init_keys.items():
@@ -36,7 +36,17 @@ for key, value in init_keys.items():
         else:
             st.session_state[key] = value
 
-# --- 4. Render Layout ---
+# --- 4. Sync State Before Rendering ---
+# This ensures that if the graph is waiting at an interrupt (like after fetch_jobs),
+# the dashboard can see the jobs currently sitting in the graph's memory.
+config = {"configurable": {"thread_id": st.session_state.thread_id}}
+current_state = st.session_state.graph_app.get_state(config)
+
+if current_state and current_state.values:
+    # Synchronize the persistent graph state with the UI session state
+    st.session_state.last_results = current_state.values
+
+# --- 5. Render Layout ---
 render_sidebar(current_dir)
 
 col_chat, col_dash = st.columns([1, 1.4])

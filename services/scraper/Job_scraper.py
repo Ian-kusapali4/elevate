@@ -3,28 +3,23 @@ import random
 from jobspy import scrape_jobs
 from Core.Unifiedstate import IndigoMasterState 
 
-# This node is responsible for taking the job title suggestions from the Career Path Agent and using jobspy to scrape job listings from various platforms.
-
 def fetch_jobs(state: IndigoMasterState):
-    
+    # --- 1. Extract Search Parameters ---
     suggestions = state.get("search_queries", {}).get("suggestions", [])
-    
-   
     location = state.get("CandidateProfile", {}).get("jobGeo", "Remote") 
     
-  
+    # Fallback to profile title if suggestions are missing
     search_titles = [s.get("title") for s in suggestions] if suggestions else [state.get("CandidateProfile", {}).get("jobTitle", "Software Engineer")]
 
     print(f"🚀 AI suggested titles for search: {search_titles}")
 
     all_scraped_jobs = []
 
-    # LOOP through each title with Human-like delays to avoid bot detection and allow all suggented titles to be scraped
+    # --- 2. Execution Loop ---
     for index, title in enumerate(search_titles):
-        
         if index > 0:
-            delay = random.uniform(2.5, 5.5) # Random sleep between 2.5 and 5.5 seconds
-            print(f"😴 Mimicking human behavior... waiting {delay:.2f}s before next search.")
+            delay = random.uniform(2.5, 5.5) 
+            print(f"😴 Mimicking human behavior... waiting {delay:.2f}s.")
             time.sleep(delay)
 
         print(f"🔍 Searching for: '{title}' in '{location}'...")
@@ -57,7 +52,7 @@ def fetch_jobs(state: IndigoMasterState):
             print(f"⚠️ JobSpy failed for '{title}': {e}")
             continue 
 
- 
+    # --- 3. Deduplication ---
     seen_urls = set()
     unique_jobs = []
     for job in all_scraped_jobs:
@@ -67,7 +62,9 @@ def fetch_jobs(state: IndigoMasterState):
 
     print(f"✅ Total Unique Jobs Found: {len(unique_jobs)}")
 
+    # --- 4. The Fix: Return the correct key ---
+    # We change 'job_listings' to 'job_matches' to match your Dashboard logic
     return {
-        "job_listings": {"results": unique_jobs, "total_found": len(unique_jobs)},
+        "job_matches": unique_jobs, 
         "retry_count": state.get("retry_count", 0) + 1
     }
