@@ -1,113 +1,50 @@
-```markdown
 ---
-title: Elevate: AI Career Optimization System
-emoji: 🚀
-colorFrom: blue
-colorTo: green
+title: Elevate: Your AI Career Defensive Engine
+emoji: 🛡️
+colorFrom: red
+colorTo: orange
 sdk: docker
-app_port: 7860
+app_port: 8501
 pinned: true
 ---
 
-# 🤖 Elevate (Hire-ability Engine)
+# 🛡️ Elevate: Reclaim Your Career in the Age of AI
 
-An agentic AI workflow designed to automate the bridge between talent and opportunity. Elevate extracts structured data from complex resumes, fetches live job listings, and uses a Human-in-the-Loop (HIP) approach to intelligently tailor resumes for specific roles—all while aggressively optimizing LLM token costs.
+**Elevate** is not a job board; it is a stateful, agentic career assistant designed to empower professionals in an AI-driven market. Built on an open-source ethos and powered by **AMD ROCm**, Elevate uses **Gemma 12B** to help users bridge the gap between their current skills and their ultimate career goals.
 
-## 🌟 Key Features
-* **High-Fidelity Extraction:** Leverages LLMs to parse unstructured PDFs into highly structured JSON candidate profiles.
-* **Token-Optimized Workflow:** Bypasses expensive AI-driven job searching. Instead, it fetches relevant jobs and relies on human intelligence to select the best targets.
-* **Human-in-the-Loop (HIP):** LangGraph execution automatically pauses (`interrupt_before`), passing control to the Streamlit UI where the user manually selects the job to pursue.
-* **Precision Tailoring:** Once a job is selected by the user, the AI rewrites and tailors the resume specifically for that role.
-* **Dockerized Deployment:** Fully containerized for consistent behavior across local and cloud environments (Hugging Face Spaces).
+## 🚀 The Power of Elevate
+While other tools automate job displacement, Elevate automates **career sovereignty**. It uses advanced Retrieval-Augmented Generation (RAG) and live market research to provide real-time strategic advice.
 
-## 🛠️ Tech Stack
-* **LLMs:** openai/gpt-oss-120b (via Groq API) & llama 3 local models 
-* **Framework:** LangChain & LangGraph (Stateful Agentic Workflows),pydantic,jobspy
-* **Interface:** Streamlit, jupiter notebook(flow visualization)
-* **DevOps:** Docker (Python-slim base)
-* **Platform:** Hugging Face Spaces
-* **Evaluation:** langsmith 
+### 🧩 Core Modules
+* **🎯 Job Matcher:** Intelligent extraction and alignment of your resume against live market opportunities.
+* **🔄 Career Pivot:** Analyzes your transferable skills to identify high-ROI career shifts, providing step-by-step transition roadmaps and timelines.
+* **⭕ The Circle:** Uses **Tavily** to scout the internet for blogs, communities, and networking groups specific to your niche, helping you build a human support system.
+* **🏆 Goal Engine:** Define your "North Star" (e.g., "Earn $200k/year" or "Become CTO"). The agent performs a **Gap Analysis** on your resume and prescribes the exact skills and milestones needed to get there.
 
-## 🔍 Observability & Evaluation
-Elevate uses **LangSmith** for full-lifecycle observability. This allows for:
-* **Trace Analysis:** Every agent decision, from skill extraction to final rewrite, is logged and traceable.
-* **Latency Monitoring:** Real-time tracking of LLM performance (e.g., monitoring the 170s+ rewrite cycles for optimization).
-* **Token Management:** Granular visibility into token consumption per node to ensure cost-efficiency.
+## 🛠️ Technical Manifesto
+Elevate is engineered for high performance on lightweight, accessible hardware.
 
+* **Compute:** Optimized for **AMD ROCm** (Radeon Open Compute) for high-speed local inference.
+* **Model:** **Gemma 12B** — A lightweight yet powerful model capable of complex reasoning and market analysis.
+* **Frameworks:** * **LangGraph & LangChain:** For complex, stateful multi-agent workflows.
+    * **Pydantic:** Strict data validation for 0% failure extraction.
+    * **JobSpy:** Real-time job scraping without the "AI-search" premium cost.
+    * **Tavily:** Direct internet access for real-time market trends and networking research.
+* **Interface:** **Streamlit** for a reactive, intuitive dashboard.
+* **Deployment:** Fully **Dockerized** for seamless deployment on local machines or cloud environments like Hugging Face.
 
-## 🏗️ System Architecture (Current Flow)
-
-Elevate operates on a sequential, stateful graph using LangGraph. The pipeline is designed to extract data, fetch jobs, pause for human selection, and then execute a tailored rewrite.
-
-### The Node Flow
-
-```text
-[ __start__ ]
-      │
-      ▼
-[ pdf_reader ]
-      │
-      ▼
-[ Resume_extaction ] ──────────────┐ (failed)
-      │      ▲                     │
-      │      └── (retry)           │
-      ▼ (passed)                   │
-[ suggested_Job_formating ] ───────┤ (failed)
-      │      ▲                     │
-      │      └── (retry)           │
-      ▼ (passed)                   │
-[ fetch_jobs ] <─────────────┐     │
-      │                      │     │
-      ▼                      │     │
-[ start_career_optimization ]│     │
-      │                      │     │
-      ▼                      │     │
-[ select_job_details ] ──────┘     │
-  (INTERRUPT: Human UI)  (retry)   │
-      │                            │
-      ▼ (Procced)                  │
-[ resume_rewrite ]                 │
-      │                            │
-      ▼                            │
-[ human_rewritter_agent ]          │
-      │                            │
-      ▼                            │
-[ __end__ ] <──────────────────────┘
+## 🏗️ The Agentic Workflow
 
 
-1. **Ingestion & Extraction (`pdf_reader` -> `Resume_extaction`):** The user uploads a PDF. The system reads the document and extracts core skills and experiences.
-2. **Search Strategy (`suggested_Job_formating`):** The AI formulates optimized keyword searches based on the candidate's profile.
-3. **Job Sourcing (`fetch_jobs`):** The system queries external boards to pull live job openings. *(Note: AI ranking is intentionally disabled here to save on token costs).*
-4. **Human-in-the-Loop / HIP (`select_job_details`):** **[GRAPH PAUSES]** The fetched jobs are displayed in the Streamlit UI. The user reviews the "Matching Job Openings" and manually clicks "Tailor Resume" on their preferred role.
-5. **Resume Tailoring (`resume_rewrite`):** **[GRAPH RESUMES]** The AI drafts a customized version of the resume targeting the user-selected job description.
-6. **Final Review (`human_rewritter_agent`):** The final polished draft is presented to the user for any last-minute manual edits.
 
-## 🚀 Local Installation & Setup
+Elevate doesn't rely on "internal knowledge." It treats the internet as its source of truth, checking current market trends and real-world networking opportunities before giving you advice.
 
-1. **Clone the repository:**
-   ```bash
-   gh repo clone Ian-kusapali4/AI-Career-Optimization-System
-   cd career-app
+## 📦 Getting Started
 
-```
+### Prerequisites
+* AMD GPU with ROCm support (Recommended) or standard Docker environment.
 
-2. **Configure Environment:**
-Create a `.env` file in the root directory and add your API keys:
-```env
-GROQ_API_KEY=your_groq_key_here
-# Add any other required scraping/LLM keys here
-
-```
-
-
-3. **Build and Run via Docker:**
+### 1. Clone & Setup
 ```bash
-docker build -t Elevate-engine .
-docker run -p 7860:7860 --env-file .env Elevate-engine
-
-```
-
-
-4. **Access the Application:**
-Open your browser and navigate to `http://localhost:7860`.
-
+git clone [https://github.com/Ian-kusapali4/AI-Career-Optimization-System](https://github.com/Ian-kusapali4/AI-Career-Optimization-System)
+cd AI-Career-Optimization-System
