@@ -33,15 +33,6 @@ from Core.Nodes.Conditions import (
 def build_unified_graph():
     builder = StateGraph(ElevateMasterState)
 
-    builder.add_conditional_edges('suggested_Job_formating', skill_extraction_condition, {
-        "passed": 'fetch_jobs', 
-        "retry": 'suggested_Job_formating',
-        "failed": END
-    })
-
-def build_unified_graph():
-    builder = StateGraph(ElevateMasterState)
-
     # 1. ADD NODES
     builder.add_node('pdf_reader', pdf_reader)
     builder.add_node('Resume_extaction', Resume_extaction)
