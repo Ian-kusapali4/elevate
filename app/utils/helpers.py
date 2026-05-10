@@ -1,7 +1,7 @@
 import streamlit as st
 from datetime import datetime
 
-def run_indigo_agent(inputs):
+def run_Elevate_agent(inputs):
     """Runs the LangGraph engine and returns the final state."""
     if st.session_state.graph_app is None:
         st.error("Graph engine not initialized. Please check your Global_Workflow.py.")
@@ -9,7 +9,7 @@ def run_indigo_agent(inputs):
 
     config = {"configurable": {"thread_id": st.session_state.thread_id}}
     
-    with st.status("🛠️ Indigo Engine: Running Nodes...", expanded=True) as status:
+    with st.status("🛠️ Elevate Engine: Running Nodes...", expanded=True) as status:
         try:
             # Merge current state with new inputs to keep resume data alive
             current_vals = st.session_state.get("last_results", {})

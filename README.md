@@ -1,6 +1,6 @@
 ```markdown
 ---
-title: Indigo: AI Career Optimization System
+title: Elevate: AI Career Optimization System
 emoji: 🚀
 colorFrom: blue
 colorTo: green
@@ -9,9 +9,9 @@ app_port: 7860
 pinned: true
 ---
 
-# 🤖 Indigo (Hire-ability Engine)
+# 🤖 Elevate (Hire-ability Engine)
 
-An agentic AI workflow designed to automate the bridge between talent and opportunity. Indigo extracts structured data from complex resumes, fetches live job listings, and uses a Human-in-the-Loop (HIP) approach to intelligently tailor resumes for specific roles—all while aggressively optimizing LLM token costs.
+An agentic AI workflow designed to automate the bridge between talent and opportunity. Elevate extracts structured data from complex resumes, fetches live job listings, and uses a Human-in-the-Loop (HIP) approach to intelligently tailor resumes for specific roles—all while aggressively optimizing LLM token costs.
 
 ## 🌟 Key Features
 * **High-Fidelity Extraction:** Leverages LLMs to parse unstructured PDFs into highly structured JSON candidate profiles.
@@ -29,7 +29,7 @@ An agentic AI workflow designed to automate the bridge between talent and opport
 * **Evaluation:** langsmith 
 
 ## 🔍 Observability & Evaluation
-Indigo uses **LangSmith** for full-lifecycle observability. This allows for:
+Elevate uses **LangSmith** for full-lifecycle observability. This allows for:
 * **Trace Analysis:** Every agent decision, from skill extraction to final rewrite, is logged and traceable.
 * **Latency Monitoring:** Real-time tracking of LLM performance (e.g., monitoring the 170s+ rewrite cycles for optimization).
 * **Token Management:** Granular visibility into token consumption per node to ensure cost-efficiency.
@@ -37,7 +37,7 @@ Indigo uses **LangSmith** for full-lifecycle observability. This allows for:
 
 ## 🏗️ System Architecture (Current Flow)
 
-Indigo operates on a sequential, stateful graph using LangGraph. The pipeline is designed to extract data, fetch jobs, pause for human selection, and then execute a tailored rewrite.
+Elevate operates on a sequential, stateful graph using LangGraph. The pipeline is designed to extract data, fetch jobs, pause for human selection, and then execute a tailored rewrite.
 
 ### The Node Flow
 
@@ -102,8 +102,8 @@ GROQ_API_KEY=your_groq_key_here
 
 3. **Build and Run via Docker:**
 ```bash
-docker build -t indigo-engine .
-docker run -p 7860:7860 --env-file .env indigo-engine
+docker build -t Elevate-engine .
+docker run -p 7860:7860 --env-file .env Elevate-engine
 
 ```
 

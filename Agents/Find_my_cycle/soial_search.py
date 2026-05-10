@@ -1,9 +1,9 @@
 import os
 from tavily import TavilyClient
-from Core.Unifiedstate import IndigoMasterState
+from Core.Unifiedstate import ElevateMasterState
 
 tavily = TavilyClient(api_key=os.getenv("TAVILY_API_KEY"))
-def real_social_search_node(state: IndigoMasterState):
+def real_social_search_node(state: ElevateMasterState):
     """
     Executes live web searches to find real community links.
     """

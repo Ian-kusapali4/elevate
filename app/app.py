@@ -16,13 +16,13 @@ from components.chat import render_control_interface  # Corrected Import
 from components.dashboard import render_dashboard
 
 # --- 2. Page Config ---
-st.set_page_config(page_title="Indigo AI 2.0", layout="wide", page_icon="🚀")
+st.set_page_config(page_title="Elevate AI 2.0", layout="wide", page_icon="🚀")
 
 # --- 3. Session State Initialization ---
 init_keys = {
     "graph_app": None,
     "last_results": {},
-    "thread_id": "indigo_user_session_v2",
+    "thread_id": "Elevate_user_session_v2",
     "messages": [],
     "logs": [],
     "CandidateProfile": None,

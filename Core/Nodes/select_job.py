@@ -1,8 +1,8 @@
-from Core.Unifiedstate import IndigoMasterState 
+from Core.Unifiedstate import ElevateMasterState 
 
 #this is the human in the loop node where the user will select the job they want and the node also filters the data to remove unnessary information, there by reducing the token usage and context window
 
-def select_job_details(state: IndigoMasterState):
+def select_job_details(state: ElevateMasterState):
     """
     Acts as a data filter. It takes the full list and returns 
     ONLY the chosen job, clearing the rest of the listings.

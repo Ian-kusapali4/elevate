@@ -1,9 +1,9 @@
-from Core.Unifiedstate import IndigoMasterState
+from Core.Unifiedstate import ElevateMasterState
 from langchain_ollama import ChatOllama
 
 llm = ChatOllama(model="gemma3:12b-cloud", temperature=0)
 
-def universal_reality_check_node(state: IndigoMasterState):
+def universal_reality_check_node(state: ElevateMasterState):
     """
     Uses AI to provide a blunt, realistic assessment of the time and effort required.
     """

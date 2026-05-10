@@ -4,7 +4,7 @@ from utils.helpers import add_log
 
 def render_sidebar(current_dir):
     with st.sidebar:
-        st.title("🚀 Indigo v2.0") 
+        st.title("🚀 Elevate v2.0") 
         uploaded_file = st.file_uploader("Upload Resume (PDF)", type="pdf")
         
         t_id = st.session_state.get("thread_id", "default-session")
@@ -46,7 +46,7 @@ def render_sidebar(current_dir):
                         else:
                             st.error(f"Analysis failed: {e}")
             else:
-                st.warning("Indigo Engine is not initialized.")
+                st.warning("Elevate Engine is not initialized.")
 
         # Display Profile Section
         if st.session_state.get("CandidateProfile"):

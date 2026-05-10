@@ -1,9 +1,9 @@
 import time
 import random
 from jobspy import scrape_jobs
-from Core.Unifiedstate import IndigoMasterState 
+from Core.Unifiedstate import ElevateMasterState 
 
-def fetch_jobs(state: IndigoMasterState):
+def fetch_jobs(state: ElevateMasterState):
     # --- 1. Extract Search Parameters ---
     suggestions = state.get("search_queries", {}).get("suggestions", [])
     location = state.get("CandidateProfile", {}).get("jobGeo", "Remote") 

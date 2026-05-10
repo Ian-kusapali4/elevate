@@ -9,7 +9,7 @@ def render_control_interface(col):
     existing_file = vals.get("file")
 
     with col:
-        st.subheader("⚙️ Indigo Command Center")
+        st.subheader("⚙️ Elevate Command Center")
         
         # --- SECTION: GOAL SETTING ---
         with st.container(border=True):
@@ -22,7 +22,7 @@ def render_control_interface(col):
             
             if st.button("🚀 Map Goal Path", use_container_width=True, type="primary"):
                 if goal_input:
-                    execute_indigo_task(
+                    execute_Elevate_task(
                         {"target_goal": goal_input, "entry_type": "goal", "file": existing_file},
                         config
                     )
@@ -38,23 +38,30 @@ def render_control_interface(col):
         
         with c1:
             if st.button("🔍 Find Job Matches", use_container_width=True):
-                execute_indigo_task({"entry_type": "job_match", "file": existing_file}, config)
+                execute_Elevate_task({"entry_type": "job_match", "file": existing_file}, config)
                 
         with c2:
             if st.button("⭕ Analyze Circle", use_container_width=True):
-                execute_indigo_task({"entry_type": "circle", "file": existing_file}, config)
+                execute_Elevate_task({"entry_type": "circle", "file": existing_file}, config)
 
         if st.button("🔄 Generate Career Pivots", use_container_width=True):
-            execute_indigo_task({"entry_type": "pivot", "file": existing_file}, config)
+            execute_Elevate_task({"entry_type": "pivot", "file": existing_file}, config)
 
-def execute_indigo_task(new_data, config):
-    """Encapsulated execution logic for the Indigo Engine"""
+def execute_Elevate_task(new_data, config):
     try:
-        # Update state with the new intent and context
+
+        current_results = st.session_state.get("last_results", {})
+        existing_file = current_results.get("file")
+
+      
+        if existing_file and "file" not in new_data:
+            new_data["file"] = existing_file
+
+        # 3. UPDATE GRAPH STATE
         st.session_state.graph_app.update_state(config, new_data)
 
-        with st.status("Indigo Engine Executing...", expanded=True) as status:
-            # Run the graph stream
+        with st.status("Elevate Engine Executing...", expanded=True) as status:
+          
             for event in st.session_state.graph_app.stream(None, config, stream_mode="updates"):
                 if event:
                     node_name = list(event.keys())[0]
@@ -62,7 +69,7 @@ def execute_indigo_task(new_data, config):
             
             status.update(label="Sync Complete!", state="complete")
             
-            # Refresh session results and trigger UI update
+            
             final_state = st.session_state.graph_app.get_state(config)
             st.session_state.last_results = final_state.values
             st.rerun()

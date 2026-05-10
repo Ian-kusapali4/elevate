@@ -17,8 +17,8 @@ class CandidateProfile(BaseModel):
     jobExcerpt: str = Field(default="")
 
 # --- 2. THE UNIFIED GRAPH STATE ---
-class IndigoMasterState(TypedDict):
-    # --- SECTION A: Original Indigo Inputs & Extraction ---
+class ElevateMasterState(TypedDict):
+    # --- SECTION A: Original Elevate Inputs & Extraction ---
     file: str
     raw_resume: Optional[str]
     profile: Optional[CandidateProfile]

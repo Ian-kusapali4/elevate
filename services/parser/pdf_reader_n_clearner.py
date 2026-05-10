@@ -1,11 +1,11 @@
 from pypdf import PdfReader
-from Core.Unifiedstate import IndigoMasterState
+from Core.Unifiedstate import ElevateMasterState
 import re
 
 
 # this tool is responsible for reading the pdf resume and cleaning it 
 #it is currently not being used as a tool right not but as part of the core system but soon will be converted to a tool
-def pdf_reader(state: IndigoMasterState):
+def pdf_reader(state: ElevateMasterState):
 
     """This function reads a PDF resume, extracts the text, and cleans it by removing special characters and unnecessary formatting. It returns a structured dictionary containing the cleaned resume text under the key 'raw_resume'."""
     file = state.get("file")

@@ -2,11 +2,11 @@ import os
 import json
 from langchain_ollama import ChatOllama
 from langchain_core.prompts import ChatPromptTemplate
-from Core.Unifiedstate import IndigoMasterState, BrainstormOutput, CareerPath
+from Core.Unifiedstate import ElevateMasterState, BrainstormOutput, CareerPath
 
 llm = ChatOllama(model="gemma3:12b-cloud", temperature=0.7, format="json")
 
-def path_brainstormer_node(state: IndigoMasterState):
+def path_brainstormer_node(state: ElevateMasterState):
     profile = state.get("CandidateProfile", {})
     search_intel = str(state.get("discovery_output", "No search data found."))
 

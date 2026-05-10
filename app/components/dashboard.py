@@ -1,5 +1,5 @@
 import streamlit as st
-from utils.helpers import run_indigo_agent
+from utils.helpers import run_Elevate_agent
 
 def render_dashboard(col):
     config = {"configurable": {"thread_id": st.session_state.thread_id}}
@@ -36,7 +36,7 @@ def render_dashboard(col):
                     selected = vals.get("selected_job")
 
                     if not matches:
-                        st.info("No job matches found yet. Try asking Indigo to 'find me a job'.")
+                        st.info("No job matches found yet. Try asking Elevate to 'find me a job'.")
                     
                     elif not selected:
                         st.write(f"### 💼 Market Matches ({len(matches)})")
@@ -68,7 +68,7 @@ def render_dashboard(col):
                                 with col2:
                                     if st.button(f"🎯 Select for Rewrite", key=f"job_sel_{idx}", use_container_width=True, type="primary"):
                                         with st.spinner(f"Creating strategy for {title}..."):
-                                            run_indigo_agent({
+                                            run_Elevate_agent({
                                                 "selected_job": j_val,
                                                 "entry_type": "job_match" 
                                             })
@@ -79,7 +79,7 @@ def render_dashboard(col):
                         st.success(f"🎯 Selected: **{selected.get('title')}** at **{selected.get('company')}**")
                         
                         if st.button("⬅️ Back to All Jobs", use_container_width=True):
-                            run_indigo_agent({"selected_job": None, "entry_type": "job_match"})
+                            run_Elevate_agent({"selected_job": None, "entry_type": "job_match"})
                             st.rerun()
                         
                         st.divider()
@@ -106,12 +106,12 @@ def render_dashboard(col):
                             st.download_button(
                                 label="📥 Download Rewritten Resume",
                                 data=display_text,
-                                file_name=f"Indigo_Rewrite_{selected.get('title')}.md",
+                                file_name=f"Elevate_Rewrite_{selected.get('title')}.md",
                                 mime="text/markdown",
                                 use_container_width=True
                             )
                         else:
-                            with st.status("🚀 Indigo is generating your tailored rewrite...", expanded=True):
+                            with st.status("🚀 Elevate is generating your tailored rewrite...", expanded=True):
                                 st.write("Comparing skills to job description...")
                                 st.write("Optimizing bullet points for ATS...")
                                 st.spinner("Finalizing content...")                            
@@ -150,7 +150,7 @@ def render_dashboard(col):
                         
                         if st.button("Generate Suggested Pivots", type="primary", use_container_width=True):
                             file_path = pivot_vals.get("file") 
-                            st.session_state.last_results = run_indigo_agent({
+                            st.session_state.last_results = run_Elevate_agent({
                                 "entry_type": "pivot",
                                 "file": file_path 
                             })
@@ -171,7 +171,7 @@ def render_dashboard(col):
                                         st.session_state.active_pivot_view = p_val.get('title')
                                         
                                         with st.spinner(f"Analyzing {p_val.get('title')}..."):
-                                            new_state = run_indigo_agent({
+                                            new_state = run_Elevate_agent({
                                                 "target_goal": p_val.get('title'),
                                                 "entry_type": "goal",
                                                 "file": pivot_vals.get("file")

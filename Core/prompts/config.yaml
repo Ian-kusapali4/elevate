@@ -1,10 +1,10 @@
-#ollama config file for Indigo app, incase you want to run it locally with Ollama instead of Groq
+#ollama config file for Elevate app, incase you want to run it locally with Ollama instead of Groq
 model_settings:
   name: "llama3-70b-instruct"
   temperature: 0.7
   max_tokens: 512
 
-#groq config file for Indigo app, incase you want to run it locally with Groq instead of Ollama
+#groq config file for Elevate app, incase you want to run it locally with Groq instead of Ollama
 model_groq_settings:
   name: "openai/gpt-oss-120b"
   temperature: 0.7

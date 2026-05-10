@@ -2,7 +2,7 @@ from langgraph.graph import StateGraph, START, END
 from langgraph.checkpoint.memory import MemorySaver
 
 # 1. IMPORT YOUR UNIFIED STATE
-from Core.Unifiedstate import IndigoMasterState 
+from Core.Unifiedstate import ElevateMasterState 
 
 # 2. IMPORT NODES & CONDITIONS
 from services.parser.pdf_reader_n_clearner import pdf_reader
@@ -31,7 +31,7 @@ from Core.Nodes.Conditions import (
 )
 
 def build_unified_graph():
-    builder = StateGraph(IndigoMasterState)
+    builder = StateGraph(ElevateMasterState)
 
     builder.add_conditional_edges('suggested_Job_formating', skill_extraction_condition, {
         "passed": 'fetch_jobs', 
@@ -40,7 +40,7 @@ def build_unified_graph():
     })
 
 def build_unified_graph():
-    builder = StateGraph(IndigoMasterState)
+    builder = StateGraph(ElevateMasterState)
 
     # 1. ADD NODES
     builder.add_node('pdf_reader', pdf_reader)

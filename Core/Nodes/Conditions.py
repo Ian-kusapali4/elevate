@@ -1,4 +1,4 @@
-from Core.Unifiedstate import IndigoMasterState 
+from Core.Unifiedstate import ElevateMasterState 
 from services.parser.yaml_parser import yaml_extraction
 from Core.model_factory import get_model
 
@@ -6,7 +6,7 @@ from Core.model_factory import get_model
 my_model = get_model()
 critic_config = yaml_extraction('critic_resume_rewrite.yaml')
 
-def ingestion_condition(graph_state: IndigoMasterState):
+def ingestion_condition(graph_state: ElevateMasterState):
    
     if not graph_state.get("raw_resume"):
         return "failed"
@@ -19,7 +19,7 @@ def ingestion_condition(graph_state: IndigoMasterState):
     
     return "passed" 
 
-def skill_extraction_condition(graph_state: IndigoMasterState):
+def skill_extraction_condition(graph_state: ElevateMasterState):
     profile = graph_state.get("CandidateProfile")
     search_queries = graph_state.get("search_queries")
     
@@ -37,7 +37,7 @@ def skill_extraction_condition(graph_state: IndigoMasterState):
     print("--- CONDITION: FAILED ---")
     return "failed"
 
-def route_user_intent(state: IndigoMasterState):
+def route_user_intent(state: ElevateMasterState):
     
     intent = str(state.get("entry_type", "job_search")).lower().strip()
     
@@ -48,7 +48,7 @@ def route_user_intent(state: IndigoMasterState):
         return intent
     return "job_search"
 
-def job_search_condition(graph_state: IndigoMasterState) -> bool:
+def job_search_condition(graph_state: ElevateMasterState) -> bool:
 
     print(f"Search Queries: {graph_state.search_queries}")
 
@@ -57,14 +57,14 @@ def job_search_condition(graph_state: IndigoMasterState) -> bool:
         return "passed"
     elif graph_state.query_search_response == False:
         return "retry"
-def job_ranking_condition(graph_state: IndigoMasterState) -> bool:
+def job_ranking_condition(graph_state: ElevateMasterState) -> bool:
     """Checks if job listings have been retrieved based on the search queries. If not, it can trigger a retry of the job search."""
     if graph_state.job_listings and len(graph_state.job_listings) > 0:
         return "passed"
     else:
         return "retry"
     
-def job_selection_condition(graph_state: IndigoMasterState) -> bool:
+def job_selection_condition(graph_state: ElevateMasterState) -> bool:
     """Checks if a job has been selected from the job listings. If not, it can prompt the user to select one."""
     # would like a human in the loop here to select a job
     if graph_state.selected_job_id:
@@ -73,7 +73,7 @@ def job_selection_condition(graph_state: IndigoMasterState) -> bool:
         return "retry"
 
     
-def critic_resume_rewrite_condition(graph_state: IndigoMasterState) -> bool:
+def critic_resume_rewrite_condition(graph_state: ElevateMasterState) -> bool:
     # """checkes the resume rewrite results, see if the response matches the job requirements, if not we can retry the resume rewrite with different prompts or parameters."""
     # try:
     #     critic_prompt = critic_config['Resume_critic']['template'].format(
@@ -89,7 +89,7 @@ def critic_resume_rewrite_condition(graph_state: IndigoMasterState) -> bool:
     
     return "Procced"
 
-def check_jobs_condition(state: IndigoMasterState) -> str:
+def check_jobs_condition(state: ElevateMasterState) -> str:
 
     if len(state.job_listings) > 0:
         return "Proceed_to_Selection"
