@@ -1,7 +1,7 @@
 ---
 title: Elevate: Your AI Career Defensive Engine
 emoji: 🛡️
-colorFrom: red
+colorFrom: Green
 colorTo: orange
 sdk: docker
 app_port: 8501
@@ -46,5 +46,5 @@ Elevate doesn't rely on "internal knowledge." It treats the internet as its sour
 
 ### 1. Clone & Setup
 ```bash
-git clone [https://github.com/Ian-kusapali4/AI-Career-Optimization-System](https://github.com/Ian-kusapali4/AI-Career-Optimization-System)
-cd AI-Career-Optimization-System
+git clone [https://github.com/Ian-kusapali4/elevate]
+cd elevate
